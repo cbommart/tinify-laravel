@@ -16,6 +16,7 @@
     "tinify/tinify":"*"
   },
   "require-dev": {
+    "phpro/grumphp": "^1.1",
     "squizlabs/php_codesniffer": "^3.0"
   },
   "autoload": {
