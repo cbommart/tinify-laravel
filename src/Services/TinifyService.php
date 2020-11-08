@@ -147,24 +147,24 @@ class TinifyService
     }
 
     /**
-     * @param string $source
-     * @param string|null $target
+     * @param string $from
+     * @param string|null $to
      * @return false|int
      * @throws AccountException
      */
-    public function tinify(string $source, string $target = null)
+    public function tinify(string $from, string $to = null)
     {
-        if (false !== filter_var($source, FILTER_VALIDATE_URL)) {
-            $source = self::fromUrl($source);
+        if (false !== filter_var($from, FILTER_VALIDATE_URL)) {
+            $source = self::fromUrl($from);
         } else {
-            $source = self::fromFile($source);
+            $source = self::fromFile($from);
         }
 
-        if (empty($target)) {
-            $target = $source;
+        if (empty($to)) {
+            $to = $from;
         }
 
-        return $source->toFile($target);
+        return $source->toFile($to);
     }
 
     /**
