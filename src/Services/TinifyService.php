@@ -65,16 +65,6 @@ class TinifyService
     }
 
     /**
-     * @param string $path
-     * @return Source
-     * @throws AccountException
-     */
-    public function fromFile(string $path): Source
-    {
-        return Source::fromFile($path);
-    }
-
-    /**
      * @param string $string
      * @return Source
      * @throws AccountException
@@ -82,25 +72,6 @@ class TinifyService
     public function fromBuffer(string $string): Source
     {
         return Source::fromBuffer($string);
-    }
-
-    /**
-     * @param string $string
-     * @return Source
-     * @throws AccountException
-     */
-    public function fromUrl(string $string): Source
-    {
-        return Source::fromUrl($string);
-    }
-
-    public function isS3Set(): bool
-    {
-        if ($this->s3_key && $this->s3_secret && $this->s3_region) {
-            return true;
-        }
-
-        throw new InvalidArgumentException('Please set S3 environment variables.');
     }
 
     /**
@@ -122,6 +93,15 @@ class TinifyService
             ]);
         }
         return null;
+    }
+
+    public function isS3Set(): bool
+    {
+        if ($this->s3_key && $this->s3_secret && $this->s3_region) {
+            return true;
+        }
+
+        throw new InvalidArgumentException('Please set S3 environment variables.');
     }
 
     /**
@@ -185,5 +165,25 @@ class TinifyService
         }
 
         return $source->toFile($target);
+    }
+
+    /**
+     * @param string $string
+     * @return Source
+     * @throws AccountException
+     */
+    public function fromUrl(string $string): Source
+    {
+        return Source::fromUrl($string);
+    }
+
+    /**
+     * @param string $path
+     * @return Source
+     * @throws AccountException
+     */
+    public function fromFile(string $path): Source
+    {
+        return Source::fromFile($path);
     }
 }
