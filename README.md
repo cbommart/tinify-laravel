@@ -76,6 +76,8 @@ $s3_image_width = $s3_result->width();
 $s3_image_hight = $s3_result->height();
 ```
 
+`NOTE:` All the images directly save to s3 is publicably readable. And you can set permissions for s3 bucket folder in your aws console to make sure the privacy of images.
+
 A [job](./src/Jobs/Tinify.php) is provided to do asynchronous compression, it can be used with the following code:
 
 ```php
@@ -86,5 +88,3 @@ app(Dispatcher::class)->dispatch(
     new Tinify($sourcePath)
 );
 ```
-
-`NOTE:` All the images directly save to s3 is publicably readable. And you can set permissions for s3 bucket folder in your aws console to make sure the privacy of images.
