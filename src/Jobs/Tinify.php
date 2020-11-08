@@ -4,7 +4,6 @@ namespace Jargoud\LaravelTinify\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Jargoud\LaravelTinify\Facades\Tinify as TinifyFacade;
@@ -12,7 +11,7 @@ use Tinify\AccountException;
 
 class Tinify implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * @var string
