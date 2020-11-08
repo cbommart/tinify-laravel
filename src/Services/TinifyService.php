@@ -1,21 +1,49 @@
 <?php
-namespace yasmuru\LaravelTinify\Services;
 
+namespace Jargoud\LaravelTinify\Services;
+
+use InvalidArgumentException;
+use Tinify\AccountException;
+use Tinify\Result;
 use Tinify\Source;
 use Tinify\Tinify;
 
-class TinifyService {
+class TinifyService
+{
+    /**
+     * @var string
+     */
+    protected $apikey;
+
+    /**
+     * @var Tinify
+     */
+    protected $client;
+
+    /**
+     * @var string
+     */
+    protected $s3_key;
+
+    /**
+     * @var string
+     */
+    protected $s3_secret;
+
+    /**
+     * @var string
+     */
+    protected $s3_region;
 
     /**
      * Get api key from env, fail if any are missing.
      * Instantiate API client and set api key.
-     *
-     * @throws Exception
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->apikey = config('tinify.apikey');
-        if(!$this->apikey) {
-            throw new \InvalidArgumentException('Please set TINIFY_APIKEY environment variables.');
+        if (!$this->apikey) {
+            throw new InvalidArgumentException('Please set TINIFY_APIKEY environment variables.');
         }
         $this->client = new Tinify();
         $this->client->setKey($this->apikey);
@@ -24,86 +52,138 @@ class TinifyService {
         $this->s3_secret = env('S3_SECRET');
         $this->s3_region = env('S3_REGION');
     }
-    public function setKey($key) {
-        return $this->client->setKey($key);
+
+    public function setKey(string $key): self
+    {
+        $this->client->setKey($key);
+        return $this;
     }
 
-    public function setAppIdentifier($appIdentifier) {
-        return $this->client->setAppIdentifier($appIdentifier);
-    }
-
-    public function getCompressionCount() {
+    public function getCompressionCount(): int
+    {
         return $this->client->getCompressionCount();
     }
 
-     public function compressionCount() {
-        return $this->client->getCompressionCount();
-    }
-
-    public function fromFile($path) {
+    /**
+     * @param string $path
+     * @return Source
+     * @throws AccountException
+     */
+    public function fromFile(string $path): Source
+    {
         return Source::fromFile($path);
     }
 
-    public function fromBuffer($string) {
+    /**
+     * @param string $string
+     * @return Source
+     * @throws AccountException
+     */
+    public function fromBuffer(string $string): Source
+    {
         return Source::fromBuffer($string);
     }
 
-    public function fromUrl($string) {
+    /**
+     * @param string $string
+     * @return Source
+     * @throws AccountException
+     */
+    public function fromUrl(string $string): Source
+    {
         return Source::fromUrl($string);
     }
 
-    function isS3Set() {
-        if($this->s3_key && $this->s3_secret && $this->s3_region ) {
+    public function isS3Set(): bool
+    {
+        if ($this->s3_key && $this->s3_secret && $this->s3_region) {
             return true;
         }
 
-        throw new \InvalidArgumentException('Please set S3 environment variables.');
+        throw new InvalidArgumentException('Please set S3 environment variables.');
     }
 
-    public function fileToS3($source_path, $bucket, $destination_path) {
-        if($this->isS3Set()) {
-            return Source::fromFile($source_path)
-                ->store(array(
-                    "service" => "s3",
-                    "aws_access_key_id" => $this->s3_key,
-                    "aws_secret_access_key" => $this->s3_secret,
-                    "region" => $this->s3_region,
-                    "path" => $bucket . $destination_path,
-                ));
+    /**
+     * @param string $sourcePath
+     * @param string $bucket
+     * @param string $destinationPath
+     * @return Result|null
+     * @throws AccountException
+     */
+    public function fileToS3(string $sourcePath, string $bucket, string $destinationPath): ?Result
+    {
+        if ($this->isS3Set()) {
+            return Source::fromFile($sourcePath)->store([
+                "service" => "s3",
+                "aws_access_key_id" => $this->s3_key,
+                "aws_secret_access_key" => $this->s3_secret,
+                "region" => $this->s3_region,
+                "path" => $bucket . $destinationPath,
+            ]);
         }
+        return null;
     }
 
-    public function bufferToS3($string, $bucket, $path) {
-        if($this->isS3Set()) {
-            return Source::fromBuffer($string)
-                ->store(array(
-                    "service" => "s3",
-                    "aws_access_key_id" => $this->s3_key,
-                    "aws_secret_access_key" => $this->s3_secret,
-                    "region" => $this->s3_region,
-                    "path" => $bucket . $path,
-                ));
+    /**
+     * @param string $string
+     * @param string $bucket
+     * @param string $path
+     * @return Result|null
+     * @throws AccountException
+     */
+    public function bufferToS3(string $string, string $bucket, string $path): ?Result
+    {
+        if ($this->isS3Set()) {
+            return Source::fromBuffer($string)->store([
+                "service" => "s3",
+                "aws_access_key_id" => $this->s3_key,
+                "aws_secret_access_key" => $this->s3_secret,
+                "region" => $this->s3_region,
+                "path" => $bucket . $path,
+            ]);
         }
+        return null;
     }
 
-    public function urlToS3($url, $bucket, $path) {
-        if($this->isS3Set()) {
-            return Source::fromUrl($url)
-                ->store(array(
-                    "service" => "s3",
-                    "aws_access_key_id" => $this->s3_key,
-                    "aws_secret_access_key" => $this->s3_secret,
-                    "region" => $this->s3_region,
-                    "path" => $bucket . $path,
-                ));
+    /**
+     * @param string $url
+     * @param string $bucket
+     * @param string $path
+     * @return Result|null
+     * @throws AccountException
+     */
+    public function urlToS3(string $url, string $bucket, string $path): ?Result
+    {
+        if ($this->isS3Set()) {
+            return Source::fromUrl($url)->store([
+                "service" => "s3",
+                "aws_access_key_id" => $this->s3_key,
+                "aws_secret_access_key" => $this->s3_secret,
+                "region" => $this->s3_region,
+                "path" => $bucket . $path,
+            ]);
         }
+        return null;
     }
 
-    public function validate() {
-        try {
-            $this->client->getClient()->request("post", "/shrink");
-        } catch (ClientException $e) {
-            return true;
+    /**
+     * @param string $source
+     * @param string|null $target
+     * @return false|int
+     * @throws AccountException
+     */
+    public function tinify(string $source, string $target = null)
+    {
+        if (false !== filter_var($source, FILTER_VALIDATE_URL)) {
+            $source = self::fromUrl($source);
+        } else {
+            $source = self::fromFile($source);
         }
+
+        if (empty($target)) {
+            $target = $source;
+        }
+
+        return $source->toFile($target);
     }
 }

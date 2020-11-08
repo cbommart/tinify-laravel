@@ -1,5 +1,5 @@
-<?php 
+<?php
 
 return [
-	'apikey' => env('TINIFY_APIKEY'),
+    'apikey' => env('TINIFY_APIKEY'),
 ];
