@@ -19,13 +19,20 @@ class Tinify implements ShouldQueue
     protected $filePath;
 
     /**
+     * @var string|null
+     */
+    protected $targetPath;
+
+    /**
      * Create a new job instance.
      *
      * @param string $filePath
+     * @param string|null $targetPath
      */
-    public function __construct(string $filePath)
+    public function __construct(string $filePath, string $targetPath = null)
     {
         $this->filePath = $filePath;
+        $this->targetPath = $targetPath ?? $filePath;
     }
 
     /**
@@ -36,6 +43,6 @@ class Tinify implements ShouldQueue
      */
     public function handle(): void
     {
-        TinifyFacade::tinify($this->filePath);
+        TinifyFacade::tinify($this->filePath, $this->targetPath);
     }
 }
