@@ -7,10 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Jargoud\LaravelTinify\Facades\Tinify;
+use Jargoud\LaravelTinify\Facades\Tinify as TinifyFacade;
 use Tinify\AccountException;
 
-class TinifyImage implements ShouldQueue
+class Tinify implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -37,6 +37,6 @@ class TinifyImage implements ShouldQueue
      */
     public function handle(): void
     {
-        Tinify::tinify($this->filePath);
+        TinifyFacade::tinify($this->filePath);
     }
 }
