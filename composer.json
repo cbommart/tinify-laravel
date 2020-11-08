@@ -11,9 +11,9 @@
     }
   ],
   "require": {
-    "php": ">=5.5.0",
-    "illuminate/support": "~5.2",
-    "tinify/tinify":"*"
+    "php": "^7.1|^8.0",
+    "illuminate/support": "^5.2|^6.0|^7.0|^8.0",
+    "tinify/tinify": "^2.0"
   },
   "require-dev": {
     "phpro/grumphp": "^1.1",
@@ -24,5 +24,11 @@
       "yasmuru\\LaravelTinify\\": "src"
     }
   },
-  "minimum-stability": "stable"
+  "minimum-stability": "stable",
+  "repositories": {
+    "tinify-php": {
+      "type": "vcs",
+      "url": "https://github.com/jargoud/tinify-php"
+    }
+  }
 }
