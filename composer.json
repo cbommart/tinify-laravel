@@ -20,7 +20,9 @@
     ],
     "require": {
         "php": "^7.1|^8.0",
-        "illuminate/support": "^5.2|^6.0|^7.0|^8.0",
+        "illuminate/bus": "^6.0|^7.0|^8.0",
+        "illuminate/queue": "^6.0|^7.0|^8.0",
+        "illuminate/support": "^6.0|^7.0|^8.0",
         "jargoud/tinify-php": "^2.0"
     },
     "require-dev": {
