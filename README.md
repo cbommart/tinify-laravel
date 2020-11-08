@@ -13,6 +13,10 @@ Tinify API support with Laravel.
     {
       "type": "vcs",
       "url": "git@github.com:jargoud/tinify-laravel.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:jargoud/tinify-php.git"
     }
   ]
 }
@@ -70,6 +74,17 @@ $s3_result = Tinify::urlToS3($image_url, $s3_bucket_name, '/path/to/save/in/buck
 $s3_image_url = $s3_result->location();
 $s3_image_width = $s3_result->width();
 $s3_image_hight = $s3_result->height();
+```
+
+A [job](./src/Jobs/Tinify.php) is provided to do asynchronous compression, it can be used with the following code:
+
+```php
+use Illuminate\Contracts\Bus\Dispatcher;
+use Jargoud\LaravelTinify\Jobs\Tinify;
+
+app(Dispatcher::class)->dispatch(
+    new Tinify($sourcePath)
+);
 ```
 
 `NOTE:` All the images directly save to s3 is publicably readable. And you can set permissions for s3 bucket folder in your aws console to make sure the privacy of images.
