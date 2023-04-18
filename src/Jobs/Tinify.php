@@ -11,34 +11,20 @@ use Tinify\AccountException;
 
 class Tinify implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
-    /**
-     * @var string
-     */
-    protected $filePath;
+    protected string $targetPath;
 
-    /**
-     * @var string|null
-     */
-    protected $targetPath;
-
-    /**
-     * Create a new job instance.
-     *
-     * @param string $filePath
-     * @param string|null $targetPath
-     */
-    public function __construct(string $filePath, string $targetPath = null)
+    public function __construct(protected string $filePath, string $targetPath = null)
     {
-        $this->filePath = $filePath;
         $this->targetPath = $targetPath ?? $filePath;
     }
 
     /**
      * Execute the job.
      *
-     * @return void
      * @throws AccountException
      */
     public function handle(): void

@@ -10,30 +10,11 @@ use Tinify\Tinify;
 
 class TinifyService
 {
-    /**
-     * @var string
-     */
-    protected $apikey;
-
-    /**
-     * @var Tinify
-     */
-    protected $client;
-
-    /**
-     * @var string
-     */
-    protected $s3_key;
-
-    /**
-     * @var string
-     */
-    protected $s3_secret;
-
-    /**
-     * @var string
-     */
-    protected $s3_region;
+    protected string $apikey;
+    protected Tinify $client;
+    protected string $s3_key;
+    protected string $s3_secret;
+    protected string $s3_region;
 
     /**
      * Get api key from env, fail if any are missing.
@@ -147,12 +128,9 @@ class TinifyService
     }
 
     /**
-     * @param string $from
-     * @param string|null $to
-     * @return false|int
      * @throws AccountException
      */
-    public function tinify(string $from, string $to = null)
+    public function tinify(string $from, string $to = null): bool|int
     {
         if (false !== filter_var($from, FILTER_VALIDATE_URL)) {
             $source = self::fromUrl($from);

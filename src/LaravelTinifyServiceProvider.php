@@ -11,14 +11,11 @@ class LaravelTinifyServiceProvider extends ServiceProvider
 
     /**
      * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
      */
-    protected $defer = false;
+    protected bool $defer = false;
 
     /**
      * Register custom form macros on package start
-     * @return void
      */
     public function boot(): void
     {
@@ -30,10 +27,8 @@ class LaravelTinifyServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(self::CONFIG_PATH, 'tinify');
 
@@ -42,10 +37,8 @@ class LaravelTinifyServiceProvider extends ServiceProvider
 
     /**
      * Get the services provided by the provider.
-     *
-     * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return [];
     }
