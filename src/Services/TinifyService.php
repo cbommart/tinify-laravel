@@ -12,9 +12,9 @@ class TinifyService
 {
     protected string $apikey;
     protected Tinify $client;
-    protected string $s3_key;
-    protected string $s3_secret;
-    protected string $s3_region;
+    protected ?string $s3_key;
+    protected ?string $s3_secret;
+    protected ?string $s3_region;
 
     /**
      * Get api key from env, fail if any are missing.
